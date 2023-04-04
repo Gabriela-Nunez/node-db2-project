@@ -26,8 +26,17 @@ router.get('/:id', checkCarId, async (req, res, next) => {
 
 
 
-router.post('/', async (req, res, next) => {
-  res.json('post new car')
+router.post('/', 
+  checkCarPayload, 
+  checkVinNumberValid, 
+  checkVinNumberUnique,
+   async (req, res, next) => {
+    try{
+      const newCar = await Car.create(req.body)
+      res.json(newCar)
+    }catch(err) {
+      next(err)
+    }
 })
 
 module.exports = router;
